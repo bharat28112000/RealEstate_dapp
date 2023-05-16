@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/bharat/Desktop/Thesis/RealEstate_dapp/contracts/Escrow.sol": {
-      "lastModificationDate": 1684229104346,
-      "contentHash": "514ed23a07aad51fc5b544b86707c767",
+      "lastModificationDate": 1684240073603,
+      "contentHash": "b961569655429032d15e93d62a3fde60",
       "sourceName": "contracts/Escrow.sol",
       "solcConfig": {
         "version": "0.8.18",
