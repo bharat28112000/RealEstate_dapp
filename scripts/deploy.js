@@ -7,25 +7,61 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = hre.ethers.utils.parseEther("0.001");
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+const tokens = (n) => {
+  return ethers.utils.parseUnits(n.toString(), 'ether')
+}
+  
+  [buyer, seller, inspector, lender] = await ethers.getSigners()
 
-  await lock.deployed();
+  // Deploy Real Estate
+  const RealEstate = await ethers.getContractFactory('RealEstate')
+  const realEstate = await RealEstate.deploy()
+  await realEstate.deployed()
 
-  console.log(
-    `Lock with ${ethers.utils.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  console.log(`real Estate: ${realEstate.address}`)
+  console.log(`minting tokens for property`)
+
+  for(let i=1; i<=3; i++)
+  {
+    const transaction = await realEstate.connect(seller).mint(`https://ipfs.io/ipfs/QmQUozrHLAusXDxrvsESJ3PYB3rUeUuBAvVWw6nop2uu7c/${i}.png`)
+    await transaction.wait()
+  }
+
+  // Deploy Escrow
+  const Escrow = await ethers.getContractFactory('Escrow')
+  let escrow = await Escrow.deploy(
+      realEstate.address,
+      seller.address,
+      inspector.address,
+      lender.address
+  )
+  
+  await escrow.deployed()
+
+  console.log(escrow.address)
+
+  for(let i=1; i<=3; i++)
+  {
+    let transaction = await realEstate.connect(seller).approve(escrow.address, i);
+    await transaction.wait()
+  }
+
+  //listing properties
+  transaction = await escrow.connect(seller).list(1, buyer.address, tokens(20), tokens(10));
+  await transaction.wait()
+  transaction = await escrow.connect(seller).list(2, buyer.address, tokens(15), tokens(5));
+  await transaction.wait()
+  transaction = await escrow.connect(seller).list(1, buyer.address, tokens(10), tokens(5));
+  await transaction.wait()
+
+  console.log(`finished`)
+
+
+
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/bharat/Desktop/Thesis/RealEstate_dapp/contracts/Escrow.sol": {
-      "lastModificationDate": 1684240073603,
-      "contentHash": "b961569655429032d15e93d62a3fde60",
+      "lastModificationDate": 1684307920600,
+      "contentHash": "028162155dbe2c2e9ba91d820bbcbaf1",
       "sourceName": "contracts/Escrow.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -28,7 +28,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "hardhat/console.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],
@@ -512,6 +514,41 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "/home/bharat/Desktop/Thesis/RealEstate_dapp/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1684229104966,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }

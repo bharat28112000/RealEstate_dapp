@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 interface IERC721 {
     function transferFrom(address _from, address _to, uint256 _id) external;
 }
