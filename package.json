@@ -12,7 +12,7 @@
     "@openzeppelin/contracts": "^4.7.3",
     "hardhat": "^2.14.0"
   },
-  "dependencies": { 
+  "dependencies": {
     "abort-controller": "^3.0.0",
     "abstract-level": "^1.0.3",
     "adm-zip": "^0.4.16",
@@ -70,6 +70,7 @@
     "decamelize": "^4.0.0",
     "depd": "^2.0.0",
     "diff": "^5.0.0",
+    "dotenv": "^16.0.3",
     "elliptic": "^6.5.4",
     "emoji-regex": "^8.0.0",
     "enquirer": "^2.3.6",
@@ -224,7 +225,6 @@
     "yargs-parser": "^20.2.4",
     "yargs-unparser": "^2.0.0",
     "yocto-queue": "^0.1.0"
-
   },
   "keywords": [],
   "description": ""

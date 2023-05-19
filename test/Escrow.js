@@ -29,6 +29,7 @@ describe('Escrow', () => {
             inspector.address,
             lender.address
         )
+        
 
         // Approve Property
         transaction = await realEstate.connect(seller).approve(escrow.address, 1)
@@ -39,7 +40,7 @@ describe('Escrow', () => {
         await transaction.wait()
 
     })
-  
+    console.log(escrow)
 
 describe('Deployment', () => {
     it('Returns NFT address', async () => {
