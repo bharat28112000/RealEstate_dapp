@@ -1,0 +1,93 @@
+/* Global Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Heading */
+  
+  .heading {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  /* Form Styles */
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    width: 50%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button[type="submit"],
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Property List Styles */
+  
+  #propertyList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #propertyList li {
+    margin-bottom: 10px;
+  }
+  
+  /* Account Info Styles */
+  
+  #accountInfo {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  #accountAddress {
+    margin-bottom: 10px;
+  }
+  
+  #connectButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  

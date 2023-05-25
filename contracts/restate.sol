@@ -13,8 +13,8 @@ contract RealEstateMarketplace is ERC721Enumerable {
 
     Property[] public properties;
 
-    mapping(uint256 => address) private propertyToOwner;
-    mapping(uint256 => address) private propertyToSeller;
+    mapping(uint256 => address) public propertyToOwner;
+    mapping(uint256 => address) public propertyToSeller;
 
     constructor() ERC721("RealEstateNFT", "RE") {}
 
@@ -72,6 +72,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
         require(_exists(_propertyId), "Property does not exist");
         require(ownerOf(_propertyId) == msg.sender, "Not the property owner");
         Property storage property = properties[_propertyId];
+        propertyToSeller[_propertyId] = msg.sender;
         property.price = _price;
         property.forSale = true;
     }
