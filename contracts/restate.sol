@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
@@ -9,12 +9,12 @@ contract RealEstateMarketplace is ERC721Enumerable {
         string description;
         uint256 price;
         bool forSale;
-        address approvedBuyer;
     }
 
     Property[] public properties;
 
     mapping(uint256 => address) private propertyToOwner;
+    mapping(uint256 => address) private propertyToSeller;
 
     constructor() ERC721("RealEstateNFT", "RE") {}
 
@@ -24,9 +24,10 @@ contract RealEstateMarketplace is ERC721Enumerable {
         uint256 _price
     ) external {
         uint256 propertyId = properties.length;
-        properties.push(Property(_name, _description, _price, true, address(0)));
+        properties.push(Property(_name, _description, _price, true));
         _safeMint(msg.sender, propertyId);
         propertyToOwner[propertyId] = msg.sender;
+        propertyToSeller[propertyId] = msg.sender;
     }
 
     function getProperty(uint256 _propertyId)
@@ -37,8 +38,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
             string memory description,
             uint256 price,
             address owner,
-            bool forSale,
-            address approvedBuyer
+            bool forSale
         )
     {
         require(_exists(_propertyId), "Property does not exist");
@@ -48,8 +48,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
             property.description,
             property.price,
             propertyToOwner[_propertyId],
-            property.forSale,
-            property.approvedBuyer
+            property.forSale
         );
     }
 
@@ -65,6 +64,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
         _transfer(propertyOwner, msg.sender, _propertyId);
         property.name = name;
         propertyToOwner[_propertyId] = msg.sender;
+        propertyToSeller[_propertyId] = propertyOwner;
         property.forSale = false;
     }
 
@@ -74,5 +74,19 @@ contract RealEstateMarketplace is ERC721Enumerable {
         Property storage property = properties[_propertyId];
         property.price = _price;
         property.forSale = true;
+    }
+
+    function sellProperty(uint256 _propertyId, uint256 _price) external {
+        require(_exists(_propertyId), "Property does not exist");
+        require(ownerOf(_propertyId) == msg.sender, "Not the property owner");
+        Property storage property = properties[_propertyId];
+        property.price = _price;
+        property.forSale = true;
+        propertyToSeller[_propertyId] = msg.sender;
+    }
+
+    function getPropertySeller(uint256 _propertyId) external view returns (address) {
+        require(_exists(_propertyId), "Property does not exist");
+        return propertyToSeller[_propertyId];
     }
 }
