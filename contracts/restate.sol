@@ -10,14 +10,25 @@ contract RealEstateMarketplace is ERC721Enumerable {
         uint256 price;
         bool forSale;
         string imageurl;
+        bool verified;
     }
 
     Property[] public properties;
+    address public admin;
 
     mapping(uint256 => address) public propertyToOwner;
     mapping(uint256 => address) public propertyToSeller;
+    mapping(uint256 => bool) public propertyVerificationStatus;
 
-    constructor() ERC721("RealEstateNFT", "RE") {}
+
+    constructor() ERC721("RealEstateNFT", "RE") {
+        admin = msg.sender;
+    }
+
+    modifier onlyVerifier() {
+    require(msg.sender == admin, "Only the verifier can perform this action");
+    _;
+}
 
     function createProperty(
         string memory _name,
@@ -26,7 +37,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
         string memory _imageurl
     ) external {
         uint256 propertyId = properties.length;
-        properties.push(Property(_name, _description, _price, true, _imageurl));
+        properties.push(Property(_name, _description, _price, true, _imageurl, false));
         _safeMint(msg.sender, propertyId);
         propertyToOwner[propertyId] = msg.sender;
         propertyToSeller[propertyId] = msg.sender;
@@ -41,7 +52,8 @@ contract RealEstateMarketplace is ERC721Enumerable {
             uint256 price,
             address owner,
             bool forSale,
-            string memory imageurl
+            string memory imageurl,
+            bool verified
         )
     {
         require(_exists(_propertyId), "Property does not exist");
@@ -52,8 +64,14 @@ contract RealEstateMarketplace is ERC721Enumerable {
             property.price,
             propertyToOwner[_propertyId],
             property.forSale,
-            property.imageurl
+            property.imageurl,
+            property.verified
         );
+    }
+
+    function verifyProperty(uint256 _propertyId) external onlyVerifier {
+    require(_exists(_propertyId), "Property does not exist");
+    properties[_propertyId].verified = true; // Set verified status to true after successful verification
     }
 
     function buyProperty(uint256 _propertyId, string memory name) external payable {
@@ -79,6 +97,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
         propertyToSeller[_propertyId] = msg.sender;
         property.price = _price;
         property.forSale = true;
+        property.verified = false;
     }
 
     function sellProperty(uint256 _propertyId, uint256 _price) external {

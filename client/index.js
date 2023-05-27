@@ -42,7 +42,7 @@ document.getElementById('connectButton').addEventListener('click', async () => {
 
 //user entering the property details and updating the blockchain
 
-const contractaddress = "0xbD0Fe1B60808931BCd8CfcFa62c413aD1a98eB6F";
+const contractaddress = "0xB90D2786E44aCbc282223a1ce5f8619b1e01beb9";
 const abi = [
   {
     "inputs": [],
@@ -123,6 +123,20 @@ const abi = [
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -275,6 +289,11 @@ const abi = [
         "internalType": "string",
         "name": "imageurl",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "verified",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -315,6 +334,26 @@ const abi = [
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "propertyVerificationStatus",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -593,11 +632,29 @@ const abi = [
         "internalType": "string",
         "name": "imageurl",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "verified",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_propertyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "verifyProperty",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -679,6 +736,7 @@ const abi = [
 const contract = new ethers.Contract(contractaddress, abi, signer);
 console.log(contract)
 
+
 document.getElementById('createPropertyForm').addEventListener('submit' , async (event) => {
     event.preventDefault();
 
@@ -723,6 +781,8 @@ async function getPropertyList(price=null, sale=null) {
         const propertyId = await contract.tokenByIndex(i);
         const property = await contract.getProperty(propertyId);
         // console.log('a'+property.price)
+
+        console.log(property.verified)
         
 
         if(property.forSale) {
@@ -737,7 +797,8 @@ async function getPropertyList(price=null, sale=null) {
                 Description: ${property.description}<br>
                 Price: ${property.price} ETH<br>
                 <small>Owner: ${property.owner}<br></small>
-                For Sale: ${property.forSale ? 'Yes' : 'No'}
+                For Sale: ${property.forSale ? 'Yes' : 'No'}<br>
+                Verified: ${property.verified ? 'Yes' : 'No'}<br>
                 <br><br>
                 `;
             }
@@ -756,11 +817,37 @@ async function getPropertyList(price=null, sale=null) {
                 `;
             }
 
+            verifyButton = document.createElement('button');
+            verifyButton.innerText = 'Verify';
+            verifyButton.setAttribute('data-propertyid', propertyId);
 
             buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
             buyButton.innerText = 'Buy';
             buyButton.setAttribute('data-propertyid', propertyId);
             // prevowner = await contract.propertytoSeller(propertyId);
+
+            verifyButton.addEventListener('click', async () => {
+              // await buyPropertynow(propertyId, property.price);
+              try {
+                
+                    let tx = await contract.verifyProperty(propertyId);
+                    await tx.wait()
+                    
+                    tx = await contract.propertyVerificationStatus(propertyId)
+                    console.log(tx)
+
+                    await getPropertyList();
+            
+                    alert('Property verified successfully')
+                    } catch(error) {
+                        console.error(error);
+                        alert('error while verifying');
+                    }    
+            })
+              
+              listItem.appendChild(verifyButton);
+              listItem.appendChild(buyButton);
+              propertyList.appendChild(listItem);
 
 
             prevowner = property.name;
@@ -787,8 +874,7 @@ async function getPropertyList(price=null, sale=null) {
                 }    
           })
             
-            listItem.appendChild(buyButton);
-            propertyList.appendChild(listItem);
+            
 
         }
     }
