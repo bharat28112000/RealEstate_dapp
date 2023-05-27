@@ -2,14 +2,43 @@
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 10px;
+    padding: 10px;
+    background-color: #FCE0F7;
+    /* background-image: url("./b1.jpg"); */
+    /* background-image: url("./background.avif"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+    
   }
   
+.box--account {
+      width: -250px;
+      height: 50px;
+      background-color: #F8B3EA;
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
   .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+  }
+
+  #box {
+
+      width: 1000px;
+      height: 450px;
+      background-color: #F8B3EA;
+      border: 1px solid #ccc;
+      padding-left: 10px;
+      text-align: center;
+      margin-left: 500px;
+      border-radius: 20px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
   
   /* Heading */
@@ -50,8 +79,8 @@ body {
   button[type="submit"],
   button {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #97E3F5;
+    color: #464343;
     border: none;
     cursor: pointer;
   }
@@ -65,29 +94,40 @@ body {
   
   #propertyList {
     list-style-type: none;
-    padding: 0;
+    padding: 0px;
+    display: flex;
   }
   
   #propertyList li {
     margin-bottom: 10px;
+    padding-right: 20px;
   }
   
   /* Account Info Styles */
   
   #accountInfo {
-    margin-top: 20px;
-    text-align: center;
+    padding-left: 1500px;
   }
   
   #accountAddress {
-    margin-bottom: 10px;
+    font-weight: bold;
   }
   
   #connectButton {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #97E3F5;
+    color: #464343;
     border: none;
     cursor: pointer;
   }
   
+  #ownedProperty {
+    list-style-type: none;
+    padding: 0px;
+    display: flex;
+  }
+
+  #ownedProperty li {
+    margin-bottom: 10px;
+    padding-right: 20px;
+  }

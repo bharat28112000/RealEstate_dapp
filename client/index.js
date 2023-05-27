@@ -42,7 +42,7 @@ document.getElementById('connectButton').addEventListener('click', async () => {
 
 //user entering the property details and updating the blockchain
 
-const contractaddress = "0x4C90070c715EE81f8614f41FB5f38EeFAD0A1084";
+const contractaddress = "0xbD0Fe1B60808931BCd8CfcFa62c413aD1a98eB6F";
 const abi = [
   {
     "inputs": [],
@@ -270,6 +270,11 @@ const abi = [
         "internalType": "bool",
         "name": "forSale",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "imageurl",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -537,6 +542,11 @@ const abi = [
         "internalType": "uint256",
         "name": "_price",
         "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_imageurl",
+        "type": "string"
       }
     ],
     "name": "createProperty",
@@ -578,6 +588,11 @@ const abi = [
         "internalType": "bool",
         "name": "forSale",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "imageurl",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -670,9 +685,10 @@ document.getElementById('createPropertyForm').addEventListener('submit' , async 
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const price = document.getElementById('price').value;
+    const image = document.getElementById('url').value;
 
     try {
-        const tx = await contract.createProperty(name, description, price);
+        const tx = await contract.createProperty(name, description, price, image);
         await tx.wait();
 
         await getPropertyList();
@@ -715,24 +731,28 @@ async function getPropertyList(price=null, sale=null) {
             if(price == null)
             {
                 listItem.innerHTML = `
+                <img src=${property.imageurl} /><br>
                 <strong>TokenId: ${propertyId}<br>
                 <strong>${property.name}</strong><br>
                 Description: ${property.description}<br>
                 Price: ${property.price} ETH<br>
-                Owner: ${property.owner}<br>
+                <small>Owner: ${property.owner}<br></small>
                 For Sale: ${property.forSale ? 'Yes' : 'No'}
+                <br><br>
                 `;
             }
             else
             {
                 
                 listItem.innerHTML = `
+                <img src=${property.imageurl} /><br>
                 <strong>TokenId: ${propertyId}<br>
                 <strong>${property.name}</strong><br>
                 Description: ${property.description}<br>
                 Price: ${price} ETH<br>
-                Owner: ${property.owner}<br>
+                <small>Owner: ${property.owner}</small><br>
                 For Sale: ${property.forSale ? 'Yes' : 'No'}
+                <br><br>
                 `;
             }
 
@@ -782,6 +802,7 @@ async function getPropertyList(price=null, sale=null) {
 
 //
 
+let powner;
 const button = document.getElementById('getownedProperty');
 button.addEventListener('click', async function() {
   
@@ -801,33 +822,33 @@ button.addEventListener('click', async function() {
         console.log(chk)
         if(chk === account)
         {
-          console.log('hi')
+          console.log('hi111')
           const propertyId = await contract.tokenByIndex(i);
           // const tokenID = await contract.tokenByIndex(propertyId);
           const property = await contract.getProperty(propertyId);
           // prevowner = await contract.propertytoSeller(propertyId)
           
-          console.log(prevowner)
-        
+          powner = await contract.propertyToSeller(propertyId);
+          console.log("#"+powner)
 
           console.log(property)
   
   
               const listItem = document.createElement('li');
               listItem.innerHTML = `
+              
+              <strong>
+              <img src=${property.imageurl} /><br>
               <strong>TokenId: ${propertyId}</strong><br>
               <strong>${property.name}</strong><br>
               Description: ${property.description}<br>
               Price: ${property.price} ETH<br>
-              Previous Owner: ${prevowner}<br>
-              Owner: ${property.owner}<br>
+              <small>Previous Owner: ${powner}<br>
+              Owner: ${property.owner}<br></small>
               For Sale: ${property.forSale ? 'Yes' : 'No'}
-              `;
+              <br><br>
+              </strong>`;
 
-            if(property.forSale)
-            {
-
-            }
             sellButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
             sellButton.innerText = 'Sell';
             sellButton.setAttribute('data-propertyid', propertyId);
@@ -858,9 +879,6 @@ button.addEventListener('click', async function() {
             
             listItem.appendChild(sellButton);
             propertyList.appendChild(listItem);
-
-
-              propertyList.appendChild(listItem);
         }
         
     }

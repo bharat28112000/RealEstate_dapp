@@ -9,6 +9,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
         string description;
         uint256 price;
         bool forSale;
+        string imageurl;
     }
 
     Property[] public properties;
@@ -21,10 +22,11 @@ contract RealEstateMarketplace is ERC721Enumerable {
     function createProperty(
         string memory _name,
         string memory _description,
-        uint256 _price
+        uint256 _price,
+        string memory _imageurl
     ) external {
         uint256 propertyId = properties.length;
-        properties.push(Property(_name, _description, _price, true));
+        properties.push(Property(_name, _description, _price, true, _imageurl));
         _safeMint(msg.sender, propertyId);
         propertyToOwner[propertyId] = msg.sender;
         propertyToSeller[propertyId] = msg.sender;
@@ -38,7 +40,8 @@ contract RealEstateMarketplace is ERC721Enumerable {
             string memory description,
             uint256 price,
             address owner,
-            bool forSale
+            bool forSale,
+            string memory imageurl
         )
     {
         require(_exists(_propertyId), "Property does not exist");
@@ -48,7 +51,8 @@ contract RealEstateMarketplace is ERC721Enumerable {
             property.description,
             property.price,
             propertyToOwner[_propertyId],
-            property.forSale
+            property.forSale,
+            property.imageurl
         );
     }
 
