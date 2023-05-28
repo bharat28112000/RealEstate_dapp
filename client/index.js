@@ -856,7 +856,7 @@ async function getPropertyList(price=null, sale=null) {
             try {
                 const name = prompt('Enter the name:');
                 buyButton.setAttribute('data-name', name);
-        
+              
                 const options = {
                     value: property.price,
                     gasLimit: 300000,
