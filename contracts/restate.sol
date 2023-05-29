@@ -179,6 +179,6 @@ contract RealEstateMarketplace is ERC721Enumerable {
         propertyToSeller[auction.propertyId] = propertyOwner;
         property.forSale = false;
         auction.ended = false;
-        delete auctions[_auctionId];ss
+        delete auctions[_auctionId];
     }
 }

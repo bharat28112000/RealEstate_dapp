@@ -4,5 +4,11 @@
     "@truffle/hdwallet-provider": "^2.1.11",
     "dotenv": "^16.0.3",
     "ethers": "^6.4.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "scripts": {
+    "start": "live-server"
   }
 }
