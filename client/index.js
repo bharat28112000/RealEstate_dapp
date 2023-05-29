@@ -42,7 +42,7 @@ document.getElementById('connectButton').addEventListener('click', async () => {
 
 //user entering the property details and updating the blockchain
 
-const contractaddress = "0x4C90070c715EE81f8614f41FB5f38EeFAD0A1084";
+const contractaddress = "0x1A6372297971059fbAf3de29D8e498e7EE408842";
 const abi = [
   {
     "inputs": [],
@@ -125,6 +125,20 @@ const abi = [
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -141,6 +155,41 @@ const abi = [
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "auctions",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "propertyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "highestBid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "highestBidder",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "ended",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -270,6 +319,16 @@ const abi = [
         "internalType": "bool",
         "name": "forSale",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "imageurl",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "verified",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -310,6 +369,26 @@ const abi = [
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "propertyVerificationStatus",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -537,6 +616,11 @@ const abi = [
         "internalType": "uint256",
         "name": "_price",
         "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_imageurl",
+        "type": "string"
       }
     ],
     "name": "createProperty",
@@ -578,11 +662,34 @@ const abi = [
         "internalType": "bool",
         "name": "forSale",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "imageurl",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "verified",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_propertyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "verifyProperty",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -658,11 +765,71 @@ const abi = [
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_propertyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "startAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "placeBid",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function",
+    "payable": true
+  },
+  {
+    "inputs": [],
+    "name": "getAuctionsLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "endAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ];
 
 const contract = new ethers.Contract(contractaddress, abi, signer);
 console.log(contract)
+
 
 document.getElementById('createPropertyForm').addEventListener('submit' , async (event) => {
     event.preventDefault();
@@ -670,14 +837,17 @@ document.getElementById('createPropertyForm').addEventListener('submit' , async 
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const price = document.getElementById('price').value;
+    const image = document.getElementById('url').value;
 
+    // document.getElementById('createPropertyForm').reset();
     try {
-        const tx = await contract.createProperty(name, description, price);
+        const tx = await contract.createProperty(name, description, price, image);
         await tx.wait();
 
+        document.getElementById('createPropertyForm').reset();
         await getPropertyList();
 
-        document.getElementById('createPropertyForm').reset();
+        
 
     } catch (error){
         console.log(error)
@@ -700,14 +870,20 @@ async function getPropertyList(price=null, sale=null) {
     propertyList.innerHTML = '';
     
     const totalproperties = await contract.totalSupply();
+    // const tx = await contract.auctions(3);
+    // console.log("###"+tx)
+    
     // console.log("b"+totalproperties)
     
+    console.log(propertyList)
+
     for(let i=0; i< totalproperties; i++)
     {
         const propertyId = await contract.tokenByIndex(i);
+        // console.log("$" + propertyId)
         const property = await contract.getProperty(propertyId);
-        // console.log('a'+property.price)
-        
+        // console.log('a'+property.price
+        const powner = await contract.propertyToSeller(propertyId);
 
         if(property.forSale) {
             const listItem = document.createElement('li');
@@ -715,63 +891,179 @@ async function getPropertyList(price=null, sale=null) {
             if(price == null)
             {
                 listItem.innerHTML = `
+                <img src=${property.imageurl} /><br>
                 <strong>TokenId: ${propertyId}<br>
                 <strong>${property.name}</strong><br>
+                <small>Owner: ${property.owner}<br></small>
+                <small>Prev Owner: ${powner}</small><br>
                 Description: ${property.description}<br>
                 Price: ${property.price} ETH<br>
-                Owner: ${property.owner}<br>
-                For Sale: ${property.forSale ? 'Yes' : 'No'}
+               
+                For Sale: ${property.forSale ? 'Yes' : 'No'}<br>
+                Verified: ${property.verified ? 'Yes' : 'No'}<br>
+                <br><br>
                 `;
             }
             else
             {
                 
                 listItem.innerHTML = `
+                <img src=${property.imageurl} /><br>
                 <strong>TokenId: ${propertyId}<br>
                 <strong>${property.name}</strong><br>
                 Description: ${property.description}<br>
                 Price: ${price} ETH<br>
-                Owner: ${property.owner}<br>
+                <small>Owner: ${property.owner}</small><br>
                 For Sale: ${property.forSale ? 'Yes' : 'No'}
+                <br><br>
                 `;
             }
 
 
-            buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
-            buyButton.innerText = 'Buy';
-            buyButton.setAttribute('data-propertyid', propertyId);
-            // prevowner = await contract.propertytoSeller(propertyId);
+            auctionsButton = document.createElement('button');
+            auctionsButton.innerText = 'Start Auction'
 
+            auctionsButton.addEventListener('click', async () => {
+              try{
+                
+                console.log("^"+propertyId)
+                let tx = await contract.startAuction(propertyId);
+                tx.wait();
 
-            prevowner = property.name;
-            buyButton.addEventListener('click', async () => {
-            // await buyPropertynow(propertyId, property.price);
-            try {
+              } catch(error) {
+                console.error(error);
+                alert('error while starting auction');
+              } 
+            })
+
+            biddButton = document.createElement('button');
+            biddButton.innerText = "Bid"
+
+            biddButton.addEventListener('click', async () => {
+              try {
                 const name = prompt('Enter the name:');
-                buyButton.setAttribute('data-name', name);
-        
+                biddButton.setAttribute('data-name', name);
+
+                const bid = prompt('Enter the biding price:');
+                biddButton.setAttribute('data-price', bid);
+              
                 const options = {
-                    value: property.price,
-                    gasLimit: 300000,
+                    value: bid,
+                    gasLimit: 300000
                 };
         
-                let tx = await contract.connect(provider.getSigner()).buyProperty(propertyId, name, options);
+                let tx = await contract.connect(provider.getSigner()).placeBid(propertyId, name, options);
                 await tx.wait()
                 
                 await getPropertyList();
         
-                alert('Property purchased successfully')
+                alert('Property bidding successfully done')
                 } catch(error) {
                     console.error(error);
-                    alert('error while purchasing');
-                }    
-          })
+                    alert('error while bidding');
+                } 
+            })
+
+            auctioneButton = document.createElement('button');
+            auctioneButton.innerText = 'End Auction'
+
+            auctioneButton.addEventListener('click', async () => {
+              try{
+                
+                // const hexValue = propertyId._hex;
+                // const pId = parseInt(hexValue, 16);
+                // console.log("^^"+hexValue)
+                // console.log("$$" + pId)
+
+                let tx = await contract.endAuction(propertyId);
+                tx.wait();
+
+
+              } catch(error) {
+                console.error(error);
+                alert('error while ending auction');
+              } 
+            })
+
+
+
+            verifyButton = document.createElement('button');
+            verifyButton.innerText = 'Verify';
+            verifyButton.setAttribute('data-propertyid', propertyId);
+
+            // buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
+            // buyButton.innerText = 'Buy';
+            // buyButton.setAttribute('data-propertyid', propertyId);
+            // prevowner = await contract.propertytoSeller(propertyId);
+
+            verifyButton.addEventListener('click', async () => {
+              // await buyPropertynow(propertyId, property.price);
+              try {
+                
+                    let tx = await contract.verifyProperty(propertyId);
+                    await tx.wait()
+                    
+                    tx = await contract.propertyVerificationStatus(propertyId)
+                    console.log(tx)
+
+                    await getPropertyList();
             
-            listItem.appendChild(buyButton);
-            propertyList.appendChild(listItem);
+                    alert('Property verified successfully')
+                    } catch(error) {
+                        console.error(error);
+                        alert('error while verifying');
+                    }    
+            })
+
+
+            
+            // document.body.appendChild(br);
+              
+              listItem.appendChild(verifyButton);
+              
+              // listItem.appendChild(buyButton);
+              listItem.appendChild(auctionsButton);
+              listItem.appendChild(auctioneButton);
+              listItem.appendChild(biddButton);
+              propertyList.appendChild(listItem);
+
+
+            prevowner = property.name;
+          //   buyButton.addEventListener('click', async () => {
+          //   // await buyPropertynow(propertyId, property.price);
+          //   try {
+          //       const name = prompt('Enter the name:');
+          //       buyButton.setAttribute('data-name', name);
+              
+          //       const options = {
+          //           value: property.price,
+          //           gasLimit: 300000,
+          //       };
+        
+          //       let tx = await contract.connect(provider.getSigner()).buyProperty(propertyId, name, options);
+          //       await tx.wait()
+                
+          //       await getPropertyList();
+        
+          //       alert('Property purchased successfully')
+          //       } catch(error) {
+          //           console.error(error);
+          //           alert('error while purchasing');
+          //       }    
+          // })
+            
+            
 
         }
     }
+
+    
+
+
+
+
+
+
 }
 
 
@@ -782,6 +1074,7 @@ async function getPropertyList(price=null, sale=null) {
 
 //
 
+let powner;
 const button = document.getElementById('getownedProperty');
 button.addEventListener('click', async function() {
   
@@ -801,33 +1094,33 @@ button.addEventListener('click', async function() {
         console.log(chk)
         if(chk === account)
         {
-          console.log('hi')
+          console.log('hi111')
           const propertyId = await contract.tokenByIndex(i);
           // const tokenID = await contract.tokenByIndex(propertyId);
           const property = await contract.getProperty(propertyId);
           // prevowner = await contract.propertytoSeller(propertyId)
           
-          console.log(prevowner)
-        
+          powner = await contract.propertyToSeller(propertyId);
+          console.log("#"+powner)
 
           console.log(property)
   
   
               const listItem = document.createElement('li');
               listItem.innerHTML = `
+              
+              <strong>
+              <img src=${property.imageurl} /><br>
               <strong>TokenId: ${propertyId}</strong><br>
               <strong>${property.name}</strong><br>
               Description: ${property.description}<br>
               Price: ${property.price} ETH<br>
-              Previous Owner: ${prevowner}<br>
-              Owner: ${property.owner}<br>
+              <small>Previous Owner: ${powner}<br>
+              Owner: ${property.owner}<br></small>
               For Sale: ${property.forSale ? 'Yes' : 'No'}
-              `;
+              <br><br>
+              </strong>`;
 
-            if(property.forSale)
-            {
-
-            }
             sellButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
             sellButton.innerText = 'Sell';
             sellButton.setAttribute('data-propertyid', propertyId);
@@ -858,9 +1151,6 @@ button.addEventListener('click', async function() {
             
             listItem.appendChild(sellButton);
             propertyList.appendChild(listItem);
-
-
-              propertyList.appendChild(listItem);
         }
         
     }

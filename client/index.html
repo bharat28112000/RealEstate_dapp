@@ -5,48 +5,74 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    
 </head>
 <body >
     <div class="heading">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6hMvR5SafAhBQ3mIvm3RfBAU_s98VHrZ1Y7OH4yNJWUtb4Z3-lsWWFEi3tDl0umLYFY8&usqp=CAU" alt="home" class="logo">
         <h1>NFT Homes</h1>
+
+        <div id="accountInfo">
+            <p id="accountAddress"><b>Metamask Account</b></p>
+            <button id="connectButton">Connect</button>
+        </div>
     </div>
+
     
-    <div>
+
+    <hr>
+
+    
+
+    <div  id="box">
         <h2>Create Property</h2>
-        <form id="createPropertyForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" required><br>
-            <label for="description">Description:</label>
-            <input type="text" id="description" required><br>
-            <label for="price">Price (ETH):</label>
-            <input type="number" id="price" required><br>
-            <button type="submit">Create Property</button>
+        <form id="createPropertyForm" class="mt-4">
+            <div >
+                <label for="name">Name:</label>
+                <input type="text"  id="name" required><br>
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <input type="text" id="description"  required><br>
+            </div>
+            <div>
+                <label for="price">Price (ETH):</label>
+                <input type="number" id="price"  required><br>
+            </div>
+            <div>
+                <label for="urlInput">URL:</label>
+                <input type="text"  id="url" placeholder="Enter URL" required><br>
+            </div>
+           <br>
+            <button type="submit" >Create Property</button>
         </form>
     </div>
     
 
-    <div>
-        <h2>Properties</h2>
-        <ul id="propertyList"></ul>
-        <form id="approveForm" style="display: none;">
+    <div class="mt-5">
+        <h2 class="text-center"><strong>Properties</strong></h2>
+        <hr>
+        <div >
+            <ul id="propertyList" class="list-group-center"></ul>
+            <form id="approveForm" style="display: none;">
             <label for="address">Name:</label>
             <input type="text" id="buyaddress" required><br>
-          </form>
+            <div class="buttons">
+
+            </div>
+        </form>
+        </div>
+        
           
     </div>
-    
+    <hr>
     <div>
-        <h2>Your Properties</h2>
-        <ul id="ownedProperty"></ul>
-        <button id="sellProperty">Sell</button><br><br>
+        <h2 class="text-center"><strong>Your Properties</strong></h2>
+        <ul id="ownedProperty"></ul><br>
         <button id="getownedProperty" disabled="true">Your Properties</button>
     </div>
 
-    <div id="accountInfo">
-        <p id="accountAddress"><b>Metamask Account</b></p>
-        <button id="connectButton">Connect</button>
-    </div>
+    
     <script src="index.js"></script>
 </body>
 </html>
