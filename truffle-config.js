@@ -18,11 +18,11 @@
  *
  */
 
-// require('dotenv').config();
-// const mnemonic = process.env["MNEMONIC"];
-// const infuraProjectId = process.env["INFURA_PROJECT_ID"];
+require('dotenv').config();
+const mnemonic = process.env.mnemonic;
+const infuraProjectId = process.env["INFURA_PROJECT_ID"];
  
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
   /**
@@ -48,11 +48,11 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
     //
-    // goerli: {
-    //   provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/${infuraProjectId}`),
-    //   network_id: 5,       // Goerli's id
-    //   chain_id: 5
-    // }
+    sepolia: {
+      provider: () => new HDWalletProvider(mnemonic, `wss://eth-sepolia.g.alchemy.com/v2/a3IGzwSsrnZ4pfKRu4z6UW2dUqQ8BtwE`),
+      network_id: 11155111,       // Goerli's id
+      chain_id: 111551111
+    }
   },
 
   // Set default mocha options here, use special reporters etc.

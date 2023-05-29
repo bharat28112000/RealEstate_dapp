@@ -42,7 +42,7 @@ document.getElementById('connectButton').addEventListener('click', async () => {
 
 //user entering the property details and updating the blockchain
 
-const contractaddress = "0xB90D2786E44aCbc282223a1ce5f8619b1e01beb9";
+const contractaddress = "0x1A6372297971059fbAf3de29D8e498e7EE408842";
 const abi = [
   {
     "inputs": [],
@@ -155,6 +155,41 @@ const abi = [
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "auctions",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "propertyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "highestBid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "highestBidder",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "ended",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -730,6 +765,65 @@ const abi = [
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_propertyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "startAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "placeBid",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function",
+    "payable": true
+  },
+  {
+    "inputs": [],
+    "name": "getAuctionsLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "endAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ];
 
@@ -745,13 +839,15 @@ document.getElementById('createPropertyForm').addEventListener('submit' , async 
     const price = document.getElementById('price').value;
     const image = document.getElementById('url').value;
 
+    // document.getElementById('createPropertyForm').reset();
     try {
         const tx = await contract.createProperty(name, description, price, image);
         await tx.wait();
 
+        document.getElementById('createPropertyForm').reset();
         await getPropertyList();
 
-        document.getElementById('createPropertyForm').reset();
+        
 
     } catch (error){
         console.log(error)
@@ -774,16 +870,20 @@ async function getPropertyList(price=null, sale=null) {
     propertyList.innerHTML = '';
     
     const totalproperties = await contract.totalSupply();
+    // const tx = await contract.auctions(3);
+    // console.log("###"+tx)
+    
     // console.log("b"+totalproperties)
     
+    console.log(propertyList)
+
     for(let i=0; i< totalproperties; i++)
     {
         const propertyId = await contract.tokenByIndex(i);
+        // console.log("$" + propertyId)
         const property = await contract.getProperty(propertyId);
-        // console.log('a'+property.price)
-
-        console.log(property.verified)
-        
+        // console.log('a'+property.price
+        const powner = await contract.propertyToSeller(propertyId);
 
         if(property.forSale) {
             const listItem = document.createElement('li');
@@ -794,9 +894,11 @@ async function getPropertyList(price=null, sale=null) {
                 <img src=${property.imageurl} /><br>
                 <strong>TokenId: ${propertyId}<br>
                 <strong>${property.name}</strong><br>
+                <small>Owner: ${property.owner}<br></small>
+                <small>Prev Owner: ${powner}</small><br>
                 Description: ${property.description}<br>
                 Price: ${property.price} ETH<br>
-                <small>Owner: ${property.owner}<br></small>
+               
                 For Sale: ${property.forSale ? 'Yes' : 'No'}<br>
                 Verified: ${property.verified ? 'Yes' : 'No'}<br>
                 <br><br>
@@ -817,13 +919,81 @@ async function getPropertyList(price=null, sale=null) {
                 `;
             }
 
+
+            auctionsButton = document.createElement('button');
+            auctionsButton.innerText = 'Start Auction'
+
+            auctionsButton.addEventListener('click', async () => {
+              try{
+                
+                console.log("^"+propertyId)
+                let tx = await contract.startAuction(propertyId);
+                tx.wait();
+
+              } catch(error) {
+                console.error(error);
+                alert('error while starting auction');
+              } 
+            })
+
+            biddButton = document.createElement('button');
+            biddButton.innerText = "Bid"
+
+            biddButton.addEventListener('click', async () => {
+              try {
+                const name = prompt('Enter the name:');
+                biddButton.setAttribute('data-name', name);
+
+                const bid = prompt('Enter the biding price:');
+                biddButton.setAttribute('data-price', bid);
+              
+                const options = {
+                    value: bid,
+                    gasLimit: 300000
+                };
+        
+                let tx = await contract.connect(provider.getSigner()).placeBid(propertyId, name, options);
+                await tx.wait()
+                
+                await getPropertyList();
+        
+                alert('Property bidding successfully done')
+                } catch(error) {
+                    console.error(error);
+                    alert('error while bidding');
+                } 
+            })
+
+            auctioneButton = document.createElement('button');
+            auctioneButton.innerText = 'End Auction'
+
+            auctioneButton.addEventListener('click', async () => {
+              try{
+                
+                // const hexValue = propertyId._hex;
+                // const pId = parseInt(hexValue, 16);
+                // console.log("^^"+hexValue)
+                // console.log("$$" + pId)
+
+                let tx = await contract.endAuction(propertyId);
+                tx.wait();
+
+
+              } catch(error) {
+                console.error(error);
+                alert('error while ending auction');
+              } 
+            })
+
+
+
             verifyButton = document.createElement('button');
             verifyButton.innerText = 'Verify';
             verifyButton.setAttribute('data-propertyid', propertyId);
 
-            buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
-            buyButton.innerText = 'Buy';
-            buyButton.setAttribute('data-propertyid', propertyId);
+            // buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
+            // buyButton.innerText = 'Buy';
+            // buyButton.setAttribute('data-propertyid', propertyId);
             // prevowner = await contract.propertytoSeller(propertyId);
 
             verifyButton.addEventListener('click', async () => {
@@ -844,40 +1014,56 @@ async function getPropertyList(price=null, sale=null) {
                         alert('error while verifying');
                     }    
             })
+
+
+            
+            // document.body.appendChild(br);
               
               listItem.appendChild(verifyButton);
-              listItem.appendChild(buyButton);
+              
+              // listItem.appendChild(buyButton);
+              listItem.appendChild(auctionsButton);
+              listItem.appendChild(auctioneButton);
+              listItem.appendChild(biddButton);
               propertyList.appendChild(listItem);
 
 
             prevowner = property.name;
-            buyButton.addEventListener('click', async () => {
-            // await buyPropertynow(propertyId, property.price);
-            try {
-                const name = prompt('Enter the name:');
-                buyButton.setAttribute('data-name', name);
+          //   buyButton.addEventListener('click', async () => {
+          //   // await buyPropertynow(propertyId, property.price);
+          //   try {
+          //       const name = prompt('Enter the name:');
+          //       buyButton.setAttribute('data-name', name);
               
-                const options = {
-                    value: property.price,
-                    gasLimit: 300000,
-                };
+          //       const options = {
+          //           value: property.price,
+          //           gasLimit: 300000,
+          //       };
         
-                let tx = await contract.connect(provider.getSigner()).buyProperty(propertyId, name, options);
-                await tx.wait()
+          //       let tx = await contract.connect(provider.getSigner()).buyProperty(propertyId, name, options);
+          //       await tx.wait()
                 
-                await getPropertyList();
+          //       await getPropertyList();
         
-                alert('Property purchased successfully')
-                } catch(error) {
-                    console.error(error);
-                    alert('error while purchasing');
-                }    
-          })
+          //       alert('Property purchased successfully')
+          //       } catch(error) {
+          //           console.error(error);
+          //           alert('error while purchasing');
+          //       }    
+          // })
             
             
 
         }
     }
+
+    
+
+
+
+
+
+
 }
 
 
