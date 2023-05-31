@@ -28,11 +28,11 @@
         <h2>Create Property</h2>
         <form id="createPropertyForm" class="mt-4">
             <div >
-                <label for="name">Name:</label>
+                <label for="name" placeholder="Name" required>Name:</label>
                 <input type="text"  id="name" required><br>
             </div>
             <div>
-                <label for="description">Description:</label>
+                <label for="description" >Description:</label>
                 <input type="text" id="description"  required><br>
             </div>
             <div>
@@ -44,13 +44,13 @@
                 <input type="text"  id="url" placeholder="Enter URL" required><br>
             </div>
            <br>
-            <button type="submit" >Create Property</button>
+            <button id="createPropertyButton" type="submit" >Create Property</button>
         </form>
     </div>
     
 
     <div class="mt-5">
-        <h2 class="text-center"><strong>Properties</strong></h2>
+        <h2 class="text-center"><strong>Properties for Sale</strong></h2>
         <hr>
         <div >
             <ul id="propertyList" class="list-group-center"></ul>

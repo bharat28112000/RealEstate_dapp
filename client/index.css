@@ -55,6 +55,7 @@ body {
   
   form {
     margin-bottom: 20px;
+    border-radius: 20px;
   }
   
   label {
@@ -73,7 +74,7 @@ body {
   button {
     padding: 10px 20px;
     background-color: #97E3F5;
-    color: #464343;
+    color: #151414;
     border: none;
     cursor: pointer;
   }
@@ -109,9 +110,11 @@ body {
   #connectButton {
     padding: 10px 20px;
     background-color: #97E3F5;
-    color: #464343;
+    color: #131212;
     border: none;
     cursor: pointer;
+    border-radius: 20px;
+
   }
   
   #ownedProperty {
@@ -123,4 +126,12 @@ body {
   #ownedProperty li {
     margin-bottom: 10px;
     padding-right: 20px;
+  }
+
+  #getownedProperty {
+    border-radius: 20px;
+  }
+
+  #createPropertyButton {
+    border-radius: 20px;
   }
