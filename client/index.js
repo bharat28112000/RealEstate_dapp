@@ -969,11 +969,6 @@ async function getPropertyList(price=null, sale=null) {
 
             auctioneButton.addEventListener('click', async () => {
               try{
-                
-                // const hexValue = propertyId._hex;
-                // const pId = parseInt(hexValue, 16);
-                // console.log("^^"+hexValue)
-                // console.log("$$" + pId)
 
                 let tx = await contract.endAuction(propertyId);
                 tx.wait();
@@ -985,19 +980,13 @@ async function getPropertyList(price=null, sale=null) {
               } 
             })
 
-
+            br = document.createElement('br');
 
             verifyButton = document.createElement('button');
             verifyButton.innerText = 'Verify';
             verifyButton.setAttribute('data-propertyid', propertyId);
 
-            // buyButton = document.createElement('button');   //jaise hi property create ho rhi hai uske corresponding buy property button create ho jaegi
-            // buyButton.innerText = 'Buy';
-            // buyButton.setAttribute('data-propertyid', propertyId);
-            // prevowner = await contract.propertytoSeller(propertyId);
-
             verifyButton.addEventListener('click', async () => {
-              // await buyPropertynow(propertyId, property.price);
               try {
                 
                     let tx = await contract.verifyProperty(propertyId);
@@ -1017,40 +1006,18 @@ async function getPropertyList(price=null, sale=null) {
 
 
             
-            // document.body.appendChild(br);
               
               listItem.appendChild(verifyButton);
-              
-              // listItem.appendChild(buyButton);
+              listItem.appendChild(br);
               listItem.appendChild(auctionsButton);
               listItem.appendChild(auctioneButton);
+              // listItem.appendChild(br);
               listItem.appendChild(biddButton);
+              // listItem.appendChild(br);
               propertyList.appendChild(listItem);
 
 
             prevowner = property.name;
-          //   buyButton.addEventListener('click', async () => {
-          //   // await buyPropertynow(propertyId, property.price);
-          //   try {
-          //       const name = prompt('Enter the name:');
-          //       buyButton.setAttribute('data-name', name);
-              
-          //       const options = {
-          //           value: property.price,
-          //           gasLimit: 300000,
-          //       };
-        
-          //       let tx = await contract.connect(provider.getSigner()).buyProperty(propertyId, name, options);
-          //       await tx.wait()
-                
-          //       await getPropertyList();
-        
-          //       alert('Property purchased successfully')
-          //       } catch(error) {
-          //           console.error(error);
-          //           alert('error while purchasing');
-          //       }    
-          // })
             
             
 
@@ -1096,9 +1063,7 @@ button.addEventListener('click', async function() {
         {
           console.log('hi111')
           const propertyId = await contract.tokenByIndex(i);
-          // const tokenID = await contract.tokenByIndex(propertyId);
           const property = await contract.getProperty(propertyId);
-          // prevowner = await contract.propertytoSeller(propertyId)
           
           powner = await contract.propertyToSeller(propertyId);
           console.log("#"+powner)
