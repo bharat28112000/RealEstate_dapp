@@ -38,6 +38,7 @@ body {
   
   .heading {
     display: flex;
+    flex-direction: column;
     align-items: center;
   }
   
@@ -100,7 +101,12 @@ body {
   /* Account Info Styles */
   
   #accountInfo {
-    padding-left: 1500px;
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+  
   }
   
   #accountAddress {
@@ -108,7 +114,9 @@ body {
   }
   
   #connectButton {
-    padding: 10px 20px;
+    
+    margin-left: 0px;
+    margin-right: 0px;
     background-color: #97E3F5;
     color: #131212;
     border: none;
@@ -134,4 +142,26 @@ body {
 
   #createPropertyButton {
     border-radius: 20px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .yproperty {
+    display: hidden;
+  }
+
+  .form-button {
+
+  }
+
+  #showFormButton {
+    border-radius: 20px;
+  }  
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
   }

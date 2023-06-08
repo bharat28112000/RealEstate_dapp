@@ -6,6 +6,17 @@ const signer = provider.getSigner();
 console.log(signer)
 
 
+//show form by clicking the button
+
+const showFormButton = document.getElementById('showFormButton');
+    const createPropertyForm = document.getElementById('box');
+
+    showFormButton.addEventListener('click', function() {
+        createPropertyForm.classList.toggle('hidden');
+    });
+
+
+
 
 let account;
 
@@ -1038,17 +1049,41 @@ async function getPropertyList(price=null, sale=null) {
 //##########################################################################################################################################
 
 
+//listing your properties in display when clickin the button
+
+// const showFormButton = document.getElementById('showFormButton');
+//     const createPropertyForm = document.getElementById('box');
+
+//     showFormButton.addEventListener('click', function() {
+//         createPropertyForm.classList.toggle('hidden');
+//     });
 
 //
 
 let powner;
+
+let isPropertiesVisible = false;
+
 const button = document.getElementById('getownedProperty');
+const yp = document.getElementById('yourPropertiesSection')
 button.addEventListener('click', async function() {
   
+    isPropertiesVisible = !isPropertiesVisible;
+    if(isPropertiesVisible)
+    {
+      yp.style.display = 'block'
+      button.textContent = 'Hide Your Properties'
+    }
+    else
+    {
+      yp.style.display = 'none'
+      button.textContent = 'Your Properties'
+    }
+
     const propertyList = document.getElementById('ownedProperty');
     propertyList.innerHTML = '';
 
-    button.style.display = 'none'
+    // button.style.display = 'none'
     let ownedproperties;
 
     console.log(account)

@@ -11,20 +11,32 @@
     <div class="heading">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6hMvR5SafAhBQ3mIvm3RfBAU_s98VHrZ1Y7OH4yNJWUtb4Z3-lsWWFEi3tDl0umLYFY8&usqp=CAU" alt="home" class="logo">
         <h1>NFT Homes</h1>
-
+        
+        <div class="button-group">
+            <div class="form-button">
+                <button id="showFormButton">Show Form</button>
+            </div>  
+    
+            <div class="yp-button">
+                <button id="getownedProperty" disabled="true">Your Properties</button>
+            </div>
+        </div>
         <div id="accountInfo">
-            <p id="accountAddress"><b>Metamask Account</b></p>
+            <p id="accountAddress"><b></b></p>
             <button id="connectButton">Connect</button>
         </div>
+
+        
+        
     </div>
 
     
 
     <hr>
 
-    
+      
 
-    <div  id="box">
+    <div  id="box" class="hidden">
         <h2>Create Property</h2>
         <form id="createPropertyForm" class="mt-4">
             <div >
@@ -66,10 +78,10 @@
           
     </div>
     <hr>
-    <div>
-        <h2 class="text-center"><strong>Your Properties</strong></h2>
+    
+    <div id="yourPropertiesSection" style="display: none">
+        <h2  class="text-center" ><strong>Your Properties</strong></h2>
         <ul id="ownedProperty"></ul><br>
-        <button id="getownedProperty" disabled="true">Your Properties</button>
     </div>
 
     
