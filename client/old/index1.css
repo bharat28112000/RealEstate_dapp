@@ -1,0 +1,167 @@
+/* Global Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    /* background-image: url("./b1.jpg"); */
+    /* background-image: url("./background.avif"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+    
+  }
+ 
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  #box {
+
+      width: 1000px;
+      height: 450px;
+      background-color: #F8B3EA;
+      border: 1px solid #ccc;
+      padding-left: 10px;
+      text-align: center;
+      margin-left: 500px;
+      border-radius: 20px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Heading */
+  
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  /* Form Styles */
+  
+  form {
+    margin-bottom: 20px;
+    border-radius: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    width: 50%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button[type="submit"],
+  button {
+    padding: 10px 20px;
+    background-color: #97E3F5;
+    color: #151414;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Property List Styles */
+  
+  #propertyList {
+    list-style-type: none;
+    padding: 0px;
+    display: flex;
+  }
+  
+  #propertyList li {
+    margin-bottom: 10px;
+    padding-right: 20px;
+  }
+  
+  /* Account Info Styles */
+  
+  #accountInfo {
+    padding-top: 10px;
+    padding-right: 60px;
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+  
+  }
+  
+  #accountAddress {
+    font-weight: bold;
+  }
+  
+  #connectButton {
+    
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: #97E3F5;
+    color: #131212;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+
+  }
+  
+  #ownedProperty {
+    list-style-type: none;
+    padding: 0px;
+    display: flex;
+  }
+
+  #ownedProperty li {
+    margin-bottom: 10px;
+    padding-right: 20px;
+  }
+
+  #getownedProperty {
+    border-radius: 20px;
+  }
+
+  #createPropertyButton {
+    border-radius: 20px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .yproperty {
+    display: hidden;
+  }
+
+  .form-button {
+
+  }
+
+  #showFormButton {
+    border-radius: 20px;
+  }  
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }

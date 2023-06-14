@@ -1,90 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>NFTHouse</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
-    
+  <title>NFTHomes</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
-<body >
-    <div class="heading">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6hMvR5SafAhBQ3mIvm3RfBAU_s98VHrZ1Y7OH4yNJWUtb4Z3-lsWWFEi3tDl0umLYFY8&usqp=CAU" alt="home" class="logo">
-        <h1>NFT Homes</h1>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">NFT HOMES</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="home()">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="toggleForm()">CREATE</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">BUY</a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="getPropertynow()">PROPERTIES</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="yourProperty()">PORTFOLIO</a>
+      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showAddress()">CONNECT</a>
+      </li>
         
-        <div class="button-group">
-            <div class="form-button">
-                <button id="showFormButton">Show Form</button>
-            </div>  
-    
-            <div class="yp-button">
-                <button id="getownedProperty" disabled="true">Your Properties</button>
-            </div>
-        </div>
-        <div id="accountInfo">
-            <p id="accountAddress"><b></b></p>
-            <button id="connectButton">Connect</button>
-        </div>
-
-        
-        
+      </ul>
     </div>
+  </nav>
 
+  <div class="hero-image">
+    <img src="https://blog.realestate.cornell.edu/files/2019/04/Slide1.jpg" alt="Image" class="img-fluid">
     
+    <div id="overlay" class="overlay"></div> <!-- Add overlay element -->
+  </div>
 
+  <div id="logo-box" class="container">
+    <div >
+      <img src="./logo.png" alt="logo" >
+    </div>
+  </div>
+  
+
+  <div id="formContainer" class="container hidden"> <!-- Add 'hidden' class initially -->
+    <h2>Create Property</h2>
+    <form id="createPropertyForm" class="mt-4">
+        <div class="form-group">
+            <label for="name" placeholder="Name" required>Name</label>
+            <input type="text" class="form-control" id="name" required><br>
+        </div>
+        <div class="form-group">
+            <label for="description" >Description:</label>
+            <input type="text" class="form-control" id="description" required><br>
+        </div>
+        <div class="form-group">
+            <label for="price">Price (ETH):</label>
+            <input type="number" class="form-control" id="price" required><br>
+        </div>
+        <div class="form-group">
+            <label for="urlInput">URL:</label>
+            <input type="text" class="form-control" id="url" placeholder="Enter URL" required><br>
+        </div>
+       <br>
+        <button id="createPropertyButton" class="btn btn-primary" type="submit" >Create Property</button>
+    </form>
+  </div>
+
+
+  <div id="list-container" class="container hidden">
+    <h2 class="text-center"><strong>Properties for Sale</strong></h2>
     <hr>
+    <div >
+        <ul id="propertyList" class="list-group-center"></ul>
+    </div>  
+  </div>
 
-      
 
-    <div  id="box" class="hidden">
-        <h2>Create Property</h2>
-        <form id="createPropertyForm" class="mt-4">
-            <div >
-                <label for="name" placeholder="Name" required>Name:</label>
-                <input type="text"  id="name" required><br>
-            </div>
-            <div>
-                <label for="description" >Description:</label>
-                <input type="text" id="description"  required><br>
-            </div>
-            <div>
-                <label for="price">Price (ETH):</label>
-                <input type="number" id="price"  required><br>
-            </div>
-            <div>
-                <label for="urlInput">URL:</label>
-                <input type="text"  id="url" placeholder="Enter URL" required><br>
-            </div>
-           <br>
-            <button id="createPropertyButton" type="submit" >Create Property</button>
-        </form>
-    </div>
-    
-
-    <div class="mt-5">
-        <h2 class="text-center"><strong>Properties for Sale</strong></h2>
-        <hr>
-        <div >
-            <ul id="propertyList" class="list-group-center"></ul>
-            <form id="approveForm" style="display: none;">
-            <label for="address">Name:</label>
-            <input type="text" id="buyaddress" required><br>
-            <div class="buttons">
-
-            </div>
-        </form>
-        </div>
-        
-          
-    </div>
+  <div id="list-container2" class="container hidden">
+    <h2 class="text-center"><strong>Your Property</strong></h2>
     <hr>
-    
-    <div id="yourPropertiesSection" style="display: none">
-        <h2  class="text-center" ><strong>Your Properties</strong></h2>
-        <ul id="ownedProperty"></ul><br>
-    </div>
+    <div >
+        <ul id="ownedProperty" class="list-group-center"></ul>
+    </div>  
+  </div>
 
-    
-    <script src="index.js"></script>
+  <!-- <div id="list-container2" class="container hidden">
+    <h2  class="text-center" ><strong>Your Properties</strong></h2>
+    <ul id="ownedProperty"></ul><br>
+  </div> -->
+
+
+
+
+
+  <!-- Add Bootstrap JS and jQuery links -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+  <script src="index.js"></script> <!-- Add your JavaScript file -->
 </body>
 </html>
