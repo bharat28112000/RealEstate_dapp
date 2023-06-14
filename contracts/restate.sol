@@ -127,7 +127,7 @@ contract RealEstateMarketplace is ERC721Enumerable {
 
         auctions.push(Auction(_propertyId, 0, address(0), false));
         // auctions.push(Auction(_propertyId, 0, address(0), _auctionEndTime));
-        Property storage property = properties[_propertyId];
+        // Property storage property = properties[_propertyId];
         propertyToSeller[_propertyId] = msg.sender;
         // property.forSale = false;
     }
@@ -181,4 +181,19 @@ contract RealEstateMarketplace is ERC721Enumerable {
         auction.ended = false;
         delete auctions[_auctionId];
     }
+
+    function isAuctionStarted(uint256 _propertyId) public view returns (bool) {
+    // require(_exists(_propertyId), "Property does not exist");
+    
+    for (uint256 i = 0; i < auctions.length; i++) {
+        if (auctions[i].propertyId == _propertyId) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
+
 }
