@@ -1,16 +1,20 @@
 
 # Real Estate NFT MarketPlace
 
-The Real Estate Marketplace is a decentralized application (DApp) built on the Ethereum blockchain. It allows users to buy and sell real estate properties represented as non-fungible tokens (NFTs). The project is implemented using the Solidity programming language and OpenZeppelin library.
+The Real Estate Marketplace is a decentralized application (DApp) built on the Ethereum blockchain. It allows users to buy, auction and sell real estate properties represented as non-fungible tokens (NFTs). The project is implemented using the Solidity programming language and OpenZeppelin library.
 
 ### Features
 - Property Creation: Sellers can create NFTs representing their real estate properties, providing details such as the property name, description, and price.
 - Property Listing: Sellers can list their properties for sale, specifying the sale price.
+- Property Auction: Sellers after listing their properties can start the auction for their respective properties and buyers can bid for the listed properties.
 - Property Purchase: Buyers can purchase properties by paying the specified sale price in Ether (ETH).
 - Ownership History: The contract maintains a transparent ownership history for each property, recording the address of each previous owner.
 
+
 ### Getting Started
+
 Two use the Real Estate NFT MarketPlace DApp locally, follow these steps:
+
 
 1. Clone the repository:
 
@@ -40,8 +44,10 @@ Two use the Real Estate NFT MarketPlace DApp locally, follow these steps:
 2. Create a new property by providing the name, description, and price.
 
 3. List the property for sale by specifying the sale price.
+
+4. Start the auction for the respective property.
     
-4. Buyers can view the listed properties and purchase them by paying the specified sale price.
+4. Buyers can view the listed properties and bid for the property in which they are interested in.
     
 5.  The ownership history for each property can be viewed to see the previous owners.
 
